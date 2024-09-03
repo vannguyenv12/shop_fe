@@ -4,8 +4,9 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 // Components
-import UserRoutes from './routes/user.routes.tsx';
-import ProductList from './features/product/components/ProductList.tsx';
+import UserRoutes from '@/routes/user.routes.tsx';
+import ProductList from '@/features/product/components/ProductList.tsx';
+import SignUpPage from '@/features/auth/pages/SignUpPage.tsx';
 
 // CSS
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
         element: <div>User Profile</div>,
       },
     ],
+  },
+  {
+    path: '/sign-up',
+    element: <SignUpPage />,
   },
 ]);
 
