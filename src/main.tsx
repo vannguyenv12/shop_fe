@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import UserRoutes from '@/routes/user.routes.tsx';
 import ProductList from '@/features/product/components/ProductList.tsx';
 import SignUpPage from '@/features/auth/pages/SignUpPage.tsx';
+import SignInPage from './features/auth/pages/SignInPage';
 
 // CSS
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: '/sign-up',
     element: <SignUpPage />,
+  },
+  {
+    path: '/sign-in',
+    element: <SignInPage />,
   },
 ]);
 

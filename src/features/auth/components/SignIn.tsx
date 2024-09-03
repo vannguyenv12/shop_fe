@@ -48,15 +48,13 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   }),
 }));
 
-export default function SignUp() {
+export default function SignIn() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
   const defaultTheme = createTheme({ palette: { mode } });
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
 
   React.useEffect(() => {
     const savedMode = localStorage.getItem('themeMode') as PaletteMode | null;
@@ -74,7 +72,6 @@ export default function SignUp() {
   const validateInputs = () => {
     const email = document.getElementById('email') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
-    const name = document.getElementById('name') as HTMLInputElement;
 
     let isValid = true;
 
@@ -94,15 +91,6 @@ export default function SignUp() {
     } else {
       setPasswordError(false);
       setPasswordErrorMessage('');
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('Name is required.');
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage('');
     }
 
     return isValid;
@@ -138,27 +126,13 @@ export default function SignUp() {
                 variant='h4'
                 sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
               >
-                Sign up
+                Sign in
               </Typography>
               <Box
                 component='form'
                 onSubmit={handleSubmit}
                 sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
               >
-                <FormControl>
-                  <FormLabel htmlFor='name'>Full name</FormLabel>
-                  <TextField
-                    autoComplete='name'
-                    name='name'
-                    required
-                    fullWidth
-                    id='name'
-                    placeholder='Jon Snow'
-                    error={nameError}
-                    helperText={nameErrorMessage}
-                    color={nameError ? 'error' : 'primary'}
-                  />
-                </FormControl>
                 <FormControl>
                   <FormLabel htmlFor='email'>Email</FormLabel>
                   <TextField
@@ -196,13 +170,13 @@ export default function SignUp() {
                   variant='contained'
                   onClick={validateInputs}
                 >
-                  Sign up
+                  Sign in
                 </Button>
                 <Typography sx={{ textAlign: 'center' }}>
-                  Already have an account?{' '}
+                  Don't have an account?{' '}
                   <span>
-                    <Link to='/sign-in' style={{ textDecoration: 'none' }}>
-                      Sign in
+                    <Link to='/sign-up' style={{ textDecoration: 'none' }}>
+                      Sign up
                     </Link>
                   </span>
                 </Typography>
