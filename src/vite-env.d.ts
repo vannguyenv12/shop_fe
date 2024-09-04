@@ -1,5 +1,10 @@
 /// <reference types="vite/client" />
 
+interface ILoginPayload {
+  email: string;
+  password: string;
+}
+
 interface IAuthPayload {
   email: string;
   firstName: string;

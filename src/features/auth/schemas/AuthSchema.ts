@@ -8,3 +8,10 @@ export const schema = yup
     password: yup.string().min(6).required(),
   })
   .required();
+
+export const loginSchema = yup
+  .object({
+    email: yup.string().email().required(),
+    password: yup.string().min(6).required(),
+  })
+  .required();

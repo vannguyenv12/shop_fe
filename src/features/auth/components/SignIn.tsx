@@ -16,8 +16,11 @@ import {
 } from '@mui/material/styles';
 import TemplateFrame from './TemplateFrame';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '@/redux/hook';
-import { toast } from '@/redux/toast/toast.action';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { ILoginInput } from '../interfaces/AuthInterface';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { loginSchema } from '../schemas/AuthSchema';
+import useLoginMutation from '../hooks/useLoginMutation';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -53,13 +56,15 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 export default function SignIn() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
   const defaultTheme = createTheme({ palette: { mode } });
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const mutation = useLoginMutation();
 
-  // Redux
-  const dispatch = useAppDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILoginInput>({
+    resolver: yupResolver(loginSchema),
+  });
 
   React.useEffect(() => {
     const savedMode = localStorage.getItem('themeMode') as PaletteMode | null;
@@ -74,44 +79,13 @@ export default function SignIn() {
     }
   }, []);
 
-  const validateInputs = () => {
-    const email = document.getElementById('email') as HTMLInputElement;
-    const password = document.getElementById('password') as HTMLInputElement;
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    return isValid;
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-
-    dispatch(toast.success('Login successfully'));
+  const onSubmit: SubmitHandler<ILoginInput> = (data) => {
+    console.log('check login data', data);
+    const loginData = {
+      email: data.email,
+      password: data.password,
+    } as ILoginPayload;
+    mutation.mutate(loginData);
   };
 
   return (
@@ -137,46 +111,37 @@ export default function SignIn() {
               </Typography>
               <Box
                 component='form'
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
               >
                 <FormControl>
                   <FormLabel htmlFor='email'>Email</FormLabel>
                   <TextField
-                    required
                     fullWidth
                     id='email'
                     placeholder='your@email.com'
-                    name='email'
                     autoComplete='email'
                     variant='outlined'
-                    error={emailError}
-                    helperText={emailErrorMessage}
-                    color={passwordError ? 'error' : 'primary'}
+                    error={Boolean(errors.email)}
+                    helperText={errors.email?.message}
+                    {...register('email')}
                   />
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor='password'>Password</FormLabel>
                   <TextField
-                    required
                     fullWidth
-                    name='password'
                     placeholder='••••••'
                     type='password'
                     id='password'
                     autoComplete='new-password'
                     variant='outlined'
-                    error={passwordError}
-                    helperText={passwordErrorMessage}
-                    color={passwordError ? 'error' : 'primary'}
+                    error={Boolean(errors.password)}
+                    helperText={errors.password?.message}
+                    {...register('password')}
                   />
                 </FormControl>
-                <Button
-                  type='submit'
-                  fullWidth
-                  variant='contained'
-                  onClick={validateInputs}
-                >
+                <Button type='submit' fullWidth variant='contained'>
                   Sign in
                 </Button>
                 <Typography sx={{ textAlign: 'center' }}>
