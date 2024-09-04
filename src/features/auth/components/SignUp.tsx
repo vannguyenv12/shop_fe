@@ -83,7 +83,7 @@ export default function SignUp() {
   const onSubmit: SubmitHandler<IFieldsInput> = (data) => {
     console.log('check data', data);
 
-    dispatch(toast.success('Login Successfully'));
+    dispatch(toast.success('Register Successfully'));
   };
 
   console.log('check errors', errors);

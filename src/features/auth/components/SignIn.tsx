@@ -16,6 +16,8 @@ import {
 } from '@mui/material/styles';
 import TemplateFrame from './TemplateFrame';
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '@/redux/hook';
+import { toast } from '@/redux/toast/toast.action';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -55,6 +57,9 @@ export default function SignIn() {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+
+  // Redux
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     const savedMode = localStorage.getItem('themeMode') as PaletteMode | null;
@@ -105,6 +110,8 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
+
+    dispatch(toast.success('Login successfully'));
   };
 
   return (
