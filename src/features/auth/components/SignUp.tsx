@@ -15,16 +15,12 @@ import {
   PaletteMode,
 } from '@mui/material/styles';
 import TemplateFrame from './TemplateFrame';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IFieldsInput } from '../interfaces/AuthInterface';
 import { schema } from '../schemas/AuthSchema';
-import { useAppDispatch } from '@/redux/hook';
-import { toast } from '@/redux/toast/toast.action';
-import authApi from '@/apis/authApi';
-import { useMutation } from '@tanstack/react-query';
-import { setUser } from '@/redux/user/user.slice';
+import useRegisterMutation from '../hooks/useRegisterMutation';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -60,8 +56,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 export default function SignUp() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
   const defaultTheme = createTheme({ palette: { mode } });
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const mutation = useRegisterMutation();
 
   const {
     register,
@@ -83,34 +78,6 @@ export default function SignUp() {
       setMode(systemPrefersDark ? 'dark' : 'light');
     }
   }, []);
-
-  const mutation = useMutation({
-    mutationFn: (authData: IAuthPayload) => {
-      return authApi.register(authData);
-    },
-    onSuccess: async (data) => {
-      console.log('success', data);
-      const myInfo = await authApi.getMe();
-      console.log('getMe', myInfo);
-
-      dispatch(
-        setUser({
-          firstName: myInfo.firstName,
-          lastName: myInfo.lastName,
-          avatar: myInfo.avatar,
-          email: myInfo.email,
-          role: myInfo.role,
-        })
-      );
-      dispatch(toast.success('Register Successfully'));
-
-      navigate('/products');
-    },
-    onError: (error) => {
-      console.log('error happen when register user', error);
-      dispatch(toast.error('Register error'));
-    },
-  });
 
   const onSubmit: SubmitHandler<IFieldsInput> = async (data) => {
     const authData = { ...data, avatar: '' } as IAuthPayload;

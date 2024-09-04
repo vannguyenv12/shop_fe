@@ -15,3 +15,9 @@ interface IUserData {
   avatar: string;
   role: string;
 }
+
+interface IErrorResponse {
+  message: string;
+  status: string;
+  statusCode: number;
+}
