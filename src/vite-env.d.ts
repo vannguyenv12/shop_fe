@@ -7,3 +7,11 @@ interface IAuthPayload {
   password: string;
   avatar: string;
 }
+
+interface IUserData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  avatar: string;
+  role: string;
+}
