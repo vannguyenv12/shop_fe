@@ -1,12 +1,18 @@
-import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { IToastProps } from './interfaces/ToastInterface';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { hideToast } from '@/redux/toast/toast.slice';
 
-export default function Toast({ open, handleClick, handleClose }: IToastProps) {
+export default function Toast() {
+  const { open, message, severity } = useAppSelector((state) => state.toast);
+  const dispatch = useAppDispatch();
+
+  const handleClose = () => {
+    dispatch(hideToast());
+  };
+
   return (
     <div>
-      <Button onClick={handleClick}>Open Snackbar</Button>
       <Snackbar
         open={open}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -15,11 +21,11 @@ export default function Toast({ open, handleClick, handleClose }: IToastProps) {
       >
         <Alert
           onClose={handleClose}
-          severity='info'
+          severity={severity}
           variant='filled'
           sx={{ width: '100%' }}
         >
-          This is a success Alert inside a Snackbar!
+          {message}
         </Alert>
       </Snackbar>
     </div>

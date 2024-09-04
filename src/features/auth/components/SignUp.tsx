@@ -20,6 +20,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IFieldsInput } from '../interfaces/AuthInterface';
 import { schema } from '../schemas/AuthSchema';
+import { useAppDispatch } from '@/redux/hook';
+import { toast } from '@/redux/toast/toast.action';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -52,9 +54,10 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   }),
 }));
 
-export default function SignUp({ handleClick }: { handleClick: () => void }) {
+export default function SignUp() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
   const defaultTheme = createTheme({ palette: { mode } });
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -79,8 +82,8 @@ export default function SignUp({ handleClick }: { handleClick: () => void }) {
 
   const onSubmit: SubmitHandler<IFieldsInput> = (data) => {
     console.log('check data', data);
-    handleClick();
-    // showToast('Login Successfully', 'success')
+
+    dispatch(toast.success('Login Successfully'));
   };
 
   console.log('check errors', errors);
