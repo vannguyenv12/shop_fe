@@ -14,6 +14,10 @@ import { Provider } from 'react-redux';
 import { store } from '@/redux/store';
 import Toast from '@/components/Toast';
 
+// React Query
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 // CSS
 
 const router = createBrowserRouter([
@@ -41,11 +45,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
-      <Toast />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <Toast />
+
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </Provider>
   </StrictMode>
 );

@@ -22,6 +22,7 @@ import { IFieldsInput } from '../interfaces/AuthInterface';
 import { schema } from '../schemas/AuthSchema';
 import { useAppDispatch } from '@/redux/hook';
 import { toast } from '@/redux/toast/toast.action';
+import authApi from '@/apis/authApi';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -80,13 +81,14 @@ export default function SignUp() {
     }
   }, []);
 
-  const onSubmit: SubmitHandler<IFieldsInput> = (data) => {
-    console.log('check data', data);
+  const onSubmit: SubmitHandler<IFieldsInput> = async (data) => {
+    const authData = { ...data, avatar: '' } as IAuthPayload;
+
+    const response = await authApi.register(authData);
+    console.log('check response', response);
 
     dispatch(toast.success('Register Successfully'));
   };
-
-  console.log('check errors', errors);
 
   return (
     <TemplateFrame>
