@@ -52,7 +52,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   }),
 }));
 
-export default function SignUp() {
+export default function SignUp({ handleClick }: { handleClick: () => void }) {
   const [mode, setMode] = React.useState<PaletteMode>('light');
   const defaultTheme = createTheme({ palette: { mode } });
 
@@ -79,6 +79,8 @@ export default function SignUp() {
 
   const onSubmit: SubmitHandler<IFieldsInput> = (data) => {
     console.log('check data', data);
+    handleClick();
+    // showToast('Login Successfully', 'success')
   };
 
   console.log('check errors', errors);

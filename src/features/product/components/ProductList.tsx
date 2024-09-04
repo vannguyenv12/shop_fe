@@ -1,5 +1,4 @@
 import productApi from '@/apis/productApi';
-import Toast from '@/components/Toast';
 import { Button } from '@mui/material';
 import { useEffect } from 'react';
 
@@ -18,8 +17,6 @@ function ProductList() {
       <Button variant='contained' color='success'>
         My Button
       </Button>
-
-      <Toast />
     </div>
   );
 }
