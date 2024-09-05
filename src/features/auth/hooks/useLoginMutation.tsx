@@ -23,7 +23,8 @@ function useLoginMutation() {
         })
       );
 
-      navigate('/products');
+      if (myInfo.role === 'ADMIN') navigate('/admin');
+      if (myInfo.role === 'USER') navigate('/');
     },
     onError(error) {
       console.log('error', error);

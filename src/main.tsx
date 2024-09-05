@@ -17,6 +17,8 @@ import Toast from '@/components/Toast';
 // React Query
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import AdminRoutes from '@/routes/admin.routes';
+import Dashboard from '@/components/Dashboard';
 
 // CSS
 
@@ -32,6 +34,16 @@ const router = createBrowserRouter([
       {
         path: 'profile',
         element: <div>User Profile</div>,
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: <AdminRoutes />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
       },
     ],
   },
