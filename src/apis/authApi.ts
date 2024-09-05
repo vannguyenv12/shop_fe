@@ -13,6 +13,10 @@ const authApi = {
     const url = 'users/me';
     return axiosClient.get<unknown, IUserData>(url);
   },
+  logout() {
+    const url = 'auth/logout';
+    return axiosClient.post(url);
+  },
 };
 
 export default authApi;
