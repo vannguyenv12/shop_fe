@@ -12,7 +12,6 @@ function CategoryAdminPage() {
   // Add Or Update
   const [openAddOrUpdateModal, setOpenAddOrUpdateModal] = useState(false);
   const handleOpenAddOrUpdateModal = () => setOpenAddOrUpdateModal(true);
-  const handleCloseAddOrUpdateModal = () => setOpenAddOrUpdateModal(false);
 
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
 
@@ -20,9 +19,9 @@ function CategoryAdminPage() {
     <div style={{ marginLeft: '250px' }}>
       <AddCategoryModal
         selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
         open={openAddOrUpdateModal}
-        handleClose={handleCloseAddOrUpdateModal}
-        handleOpen={handleOpenAddOrUpdateModal}
+        setOpenAddOrUpdateModal={setOpenAddOrUpdateModal}
       />
       <CategoryListAdmin
         handleOpenConfirmModal={handleOpenConfirmModal}

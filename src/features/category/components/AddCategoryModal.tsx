@@ -10,12 +10,13 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import useCategoryMutation from '../hooks/useCategoryMutation';
+import useCategoryCreate from '../hooks/useCategoryCreate';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { categoryCreateSchema } from '../schemas/CategorySchema';
 import categoryIcons from '@/contants/category-icon';
 import { useEffect } from 'react';
+import useCategoryUpdate from '../hooks/useCategoryUpdate';
 
 const style = {
   position: 'absolute',
@@ -36,28 +37,40 @@ interface IInputFields {
 
 interface ICategoryModalProps {
   selectedCategory: ICategory | undefined;
+  setSelectedCategory: (category: ICategory | undefined) => void;
   open: boolean;
-  handleClose: () => void;
-  handleOpen: () => void;
+  setOpenAddOrUpdateModal: (open: boolean) => void;
 }
 
 export default function AddCategoryModal({
   selectedCategory,
+  setSelectedCategory,
   open,
-  handleClose,
-  handleOpen,
+  setOpenAddOrUpdateModal,
 }: ICategoryModalProps) {
   const {
     register,
     handleSubmit,
     setValue,
-
+    reset,
     formState: { errors },
   } = useForm<IInputFields>({
     resolver: yupResolver(categoryCreateSchema),
   });
 
-  const categoryMutation = useCategoryMutation(handleClose);
+  const handleClose = () => {
+    setOpenAddOrUpdateModal(false);
+    reset();
+  };
+
+  const handleOpen = (mode: string) => {
+    if (mode === 'add') setSelectedCategory(undefined);
+
+    setOpenAddOrUpdateModal(true);
+  };
+
+  const categoryCreate = useCategoryCreate(handleClose);
+  const categoryUpdate = useCategoryUpdate(handleClose);
 
   // TEST
 
@@ -66,9 +79,13 @@ export default function AddCategoryModal({
   };
 
   const onSubmit: SubmitHandler<IInputFields> = (data) => {
-    console.log('submit data', data);
-
-    categoryMutation.mutate(data);
+    if (selectedCategory) {
+      const updateData = { id: selectedCategory.id, category: data };
+      console.log('check updateData', updateData);
+      categoryUpdate.mutate(updateData);
+    } else {
+      categoryCreate.mutate(data);
+    }
   };
 
   useEffect(() => {
@@ -80,7 +97,7 @@ export default function AddCategoryModal({
 
   return (
     <div>
-      <Button variant='contained' onClick={handleOpen}>
+      <Button variant='contained' onClick={() => handleOpen('add')}>
         Add Category
       </Button>
       <Modal
