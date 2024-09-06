@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import useCategoryDelete from '../hooks/useCategoryDelete';
 
 const style = {
   position: 'absolute',
@@ -28,6 +29,13 @@ export default function ModalConfirm({
   handleCloseConfirmModal,
   selectedCategory,
 }: IModalConfirmProps) {
+  const deleteMutation = useCategoryDelete(handleCloseConfirmModal);
+
+  const handleSubmit = () => {
+    console.log('delete', selectedCategory);
+    deleteMutation.mutate(selectedCategory.id);
+  };
+
   return (
     <div>
       <Button onClick={handleOpenConfirmModal}>Open modal</Button>
@@ -47,7 +55,7 @@ export default function ModalConfirm({
             Are you sure to delete category: {selectedCategory.name}
           </Typography>
 
-          <Button variant='contained' fullWidth>
+          <Button variant='contained' fullWidth onClick={handleSubmit}>
             Submit
           </Button>
         </Box>
