@@ -6,6 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import useCategoriesQuery from '../hooks/useCategoriesQuery';
+import categoryIcons from '@/contants/category-icon';
 
 export default function CategoryAdminList() {
   const { data: category, isLoading, error } = useCategoriesQuery();
@@ -32,7 +33,7 @@ export default function CategoryAdminList() {
               <TableCell component='th' scope='row'>
                 {row.name}
               </TableCell>
-              <TableCell align='right'>{row.icon}</TableCell>
+              <TableCell align='right'>{categoryIcons[row.icon]}</TableCell>
             </TableRow>
           ))}
         </TableBody>

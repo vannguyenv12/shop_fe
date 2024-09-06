@@ -14,8 +14,13 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import PetsIcon from '@mui/icons-material/Pets';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import React from 'react';
 
-const categoryIcons = {
+interface ICategoryIcon {
+  [key: string]: React.ReactElement;
+}
+
+const categoryIcons: ICategoryIcon = {
   CategoryIcon: <CategoryIcon />,
   HomeRepairServiceIcon: <HomeRepairServiceIcon />,
   RestaurantIcon: <RestaurantIcon />,

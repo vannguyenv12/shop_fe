@@ -3,11 +3,19 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { TextField } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
 import useCategoryMutation from '../hooks/useCategoryMutation';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { categoryCreateSchema } from '../schemas/CategorySchema';
+import categoryIcons from '@/contants/category-icon';
 
 const style = {
   position: 'absolute',
@@ -27,11 +35,11 @@ interface IInputFields {
 }
 
 export default function AddCategoryModal() {
-  const categoryMutation = useCategoryMutation();
-
   const {
     register,
     handleSubmit,
+    setValue,
+
     formState: { errors },
   } = useForm<IInputFields>({
     resolver: yupResolver(categoryCreateSchema),
@@ -40,6 +48,14 @@ export default function AddCategoryModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const categoryMutation = useCategoryMutation(handleClose);
+
+  // TEST
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setValue('icon', event.target.value);
+  };
 
   const onSubmit: SubmitHandler<IInputFields> = (data) => {
     console.log('submit data', data);
@@ -76,15 +92,28 @@ export default function AddCategoryModal() {
             helperText={errors.name?.message}
             {...register('name')}
           />
-          <TextField
-            label='Icon'
-            variant='outlined'
-            fullWidth
-            sx={{ marginBottom: '10px' }}
-            error={Boolean(errors.icon)}
-            helperText={errors.icon?.message}
-            {...register('icon')}
-          />
+          <FormControl fullWidth>
+            <InputLabel id='demo-simple-select-label'>Icon</InputLabel>
+            <Select
+              labelId='demo-simple-select-label'
+              id='demo-simple-select'
+              label='Icon'
+              defaultValue=''
+              onChange={handleChange}
+            >
+              {Object.keys(categoryIcons).map((categoryKey) => {
+                return (
+                  <MenuItem key={categoryKey} value={categoryKey}>
+                    {categoryIcons[categoryKey]} - {categoryKey}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+            {errors.icon && (
+              <Typography color='error'>{errors.icon?.message}</Typography>
+            )}
+          </FormControl>
+
           <Button type='submit' variant='contained' fullWidth>
             Submit
           </Button>
