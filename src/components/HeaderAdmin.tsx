@@ -242,6 +242,7 @@ export default function HeaderAdmin() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <div style={{ height: '64px' }}></div>
     </Box>
   );
 }

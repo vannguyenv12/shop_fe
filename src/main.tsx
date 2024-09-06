@@ -19,6 +19,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import AdminRoutes from '@/routes/admin.routes';
 import Dashboard from '@/components/Dashboard';
+import CategoryAdminPage from '@/features/category/pages/CategoryAdminPage';
 
 // CSS
 
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Dashboard />,
+      },
+      {
+        path: 'category',
+        element: <CategoryAdminPage />,
       },
     ],
   },

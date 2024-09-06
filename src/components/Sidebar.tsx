@@ -52,6 +52,7 @@ export default function Sidebar() {
       <Drawer
         open={true}
         hideBackdrop
+        variant='persistent'
         sx={{ '& .MuiDrawer-paper': { marginTop: '64px' } }}
       >
         {DrawerList}
