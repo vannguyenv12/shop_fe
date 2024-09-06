@@ -33,7 +33,8 @@ function useAuthenticate() {
   }, [user, navigate, isLoading, data]);
 
   useEffect(() => {
-    if (data && user && user.user.role === 'USER') {
+    console.log('check data', user);
+    if (data && user && user.isAuthenticated && user.user.role === 'USER') {
       navigate('/');
     }
   }, [data, user, navigate]);
