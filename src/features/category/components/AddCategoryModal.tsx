@@ -4,6 +4,10 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { TextField } from '@mui/material';
+import useCategoryMutation from '../hooks/useCategoryMutation';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { categoryCreateSchema } from '../schemas/CategorySchema';
 
 const style = {
   position: 'absolute',
@@ -17,10 +21,31 @@ const style = {
   p: 4,
 };
 
+interface IInputFields {
+  name: string;
+  icon: string;
+}
+
 export default function AddCategoryModal() {
+  const categoryMutation = useCategoryMutation();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IInputFields>({
+    resolver: yupResolver(categoryCreateSchema),
+  });
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const onSubmit: SubmitHandler<IInputFields> = (data) => {
+    console.log('submit data', data);
+
+    categoryMutation.mutate(data);
+  };
 
   return (
     <div>
@@ -33,7 +58,7 @@ export default function AddCategoryModal() {
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
-        <Box sx={style}>
+        <Box sx={style} component={'form'} onSubmit={handleSubmit(onSubmit)}>
           <Typography
             id='modal-modal-title'
             variant='h6'
@@ -47,14 +72,20 @@ export default function AddCategoryModal() {
             variant='outlined'
             fullWidth
             sx={{ marginBottom: '10px' }}
+            error={Boolean(errors.name)}
+            helperText={errors.name?.message}
+            {...register('name')}
           />
           <TextField
             label='Icon'
             variant='outlined'
             fullWidth
             sx={{ marginBottom: '10px' }}
+            error={Boolean(errors.icon)}
+            helperText={errors.icon?.message}
+            {...register('icon')}
           />
-          <Button variant='contained' fullWidth>
+          <Button type='submit' variant='contained' fullWidth>
             Submit
           </Button>
         </Box>

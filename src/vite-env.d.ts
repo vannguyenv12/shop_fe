@@ -27,6 +27,14 @@ interface IErrorResponse {
   statusCode: number;
 }
 
+// Common Response
+
+interface IApiResponse<T> {
+  message: string;
+  data: T;
+}
+
+// Category
 interface ICategory {
   id: number;
   name: string;
@@ -34,7 +42,7 @@ interface ICategory {
   status: boolean;
 }
 
-interface ICategoryResponse {
-  message: string;
-  data: ICategory[];
+interface ICategoryPayload {
+  name: string;
+  icon: string;
 }

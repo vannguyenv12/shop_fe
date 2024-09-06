@@ -2,7 +2,7 @@ import categoryApi from '@/apis/categoryApi';
 import { useQuery } from '@tanstack/react-query';
 
 function useCategoriesQuery() {
-  const initialState: ICategoryResponse = {
+  const initialState: IApiResponse<ICategory[]> = {
     message: '',
     data: [],
   };
