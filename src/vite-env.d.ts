@@ -26,3 +26,15 @@ interface IErrorResponse {
   status: string;
   statusCode: number;
 }
+
+interface ICategory {
+  id: number;
+  name: string;
+  icon: string;
+  status: boolean;
+}
+
+interface ICategoryResponse {
+  message: string;
+  data: ICategory[];
+}

@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { TextField } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -33,12 +34,29 @@ export default function AddCategoryModal() {
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Typography id='modal-modal-title' variant='h6' component='h2'>
-            Text in a modal
+          <Typography
+            id='modal-modal-title'
+            variant='h6'
+            component='h2'
+            sx={{ marginBottom: '10px' }}
+          >
+            Category
           </Typography>
-          <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          <TextField
+            label='Name'
+            variant='outlined'
+            fullWidth
+            sx={{ marginBottom: '10px' }}
+          />
+          <TextField
+            label='Icon'
+            variant='outlined'
+            fullWidth
+            sx={{ marginBottom: '10px' }}
+          />
+          <Button variant='contained' fullWidth>
+            Submit
+          </Button>
         </Box>
       </Modal>
     </div>
