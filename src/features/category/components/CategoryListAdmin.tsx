@@ -11,11 +11,13 @@ import { Button } from '@mui/material';
 
 interface ICategoryAdminListProps {
   handleOpenConfirmModal: () => void;
+  handleOpenAddOrUpdateModal: () => void;
   setSelectedCategory: (category: ICategory) => void;
 }
 
 export default function CategoryAdminList({
   handleOpenConfirmModal,
+  handleOpenAddOrUpdateModal,
   setSelectedCategory,
 }: ICategoryAdminListProps) {
   const { data: category, isLoading, error } = useCategoriesQuery();
@@ -27,6 +29,11 @@ export default function CategoryAdminList({
   const handleDelete = (category: ICategory) => {
     handleOpenConfirmModal();
     setSelectedCategory(category);
+  };
+
+  const handleUpdate = (category: ICategory) => {
+    setSelectedCategory(category);
+    handleOpenAddOrUpdateModal();
   };
 
   return (
@@ -50,6 +57,16 @@ export default function CategoryAdminList({
               </TableCell>
               <TableCell align='right'>{categoryIcons[row.icon]}</TableCell>
               <TableCell align='right'>
+                <Button
+                  variant='contained'
+                  color='warning'
+                  sx={{
+                    marginRight: '10px',
+                  }}
+                  onClick={() => handleUpdate(row)}
+                >
+                  Update
+                </Button>
                 <Button
                   variant='contained'
                   color='error'

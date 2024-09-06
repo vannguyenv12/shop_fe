@@ -4,22 +4,29 @@ import CategoryListAdmin from '../components/CategoryListAdmin';
 import ModalConfirm from '../components/ModalConfirm';
 
 function CategoryAdminPage() {
+  // Delete
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const handleOpenConfirmModal = () => setOpenConfirmModal(true);
   const handleCloseConfirmModal = () => setOpenConfirmModal(false);
 
-  const [selectedCategory, setSelectedCategory] = useState<ICategory>({
-    id: 1,
-    name: '',
-    icon: '',
-    status: true,
-  });
+  // Add Or Update
+  const [openAddOrUpdateModal, setOpenAddOrUpdateModal] = useState(false);
+  const handleOpenAddOrUpdateModal = () => setOpenAddOrUpdateModal(true);
+  const handleCloseAddOrUpdateModal = () => setOpenAddOrUpdateModal(false);
+
+  const [selectedCategory, setSelectedCategory] = useState<ICategory>();
 
   return (
     <div style={{ marginLeft: '250px' }}>
-      <AddCategoryModal />
+      <AddCategoryModal
+        selectedCategory={selectedCategory}
+        open={openAddOrUpdateModal}
+        handleClose={handleCloseAddOrUpdateModal}
+        handleOpen={handleOpenAddOrUpdateModal}
+      />
       <CategoryListAdmin
         handleOpenConfirmModal={handleOpenConfirmModal}
+        handleOpenAddOrUpdateModal={handleOpenAddOrUpdateModal}
         setSelectedCategory={setSelectedCategory}
       />
       <ModalConfirm

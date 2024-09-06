@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -16,6 +15,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { categoryCreateSchema } from '../schemas/CategorySchema';
 import categoryIcons from '@/contants/category-icon';
+import { useEffect } from 'react';
 
 const style = {
   position: 'absolute',
@@ -34,7 +34,19 @@ interface IInputFields {
   icon: string;
 }
 
-export default function AddCategoryModal() {
+interface ICategoryModalProps {
+  selectedCategory: ICategory | undefined;
+  open: boolean;
+  handleClose: () => void;
+  handleOpen: () => void;
+}
+
+export default function AddCategoryModal({
+  selectedCategory,
+  open,
+  handleClose,
+  handleOpen,
+}: ICategoryModalProps) {
   const {
     register,
     handleSubmit,
@@ -44,10 +56,6 @@ export default function AddCategoryModal() {
   } = useForm<IInputFields>({
     resolver: yupResolver(categoryCreateSchema),
   });
-
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   const categoryMutation = useCategoryMutation(handleClose);
 
@@ -62,6 +70,13 @@ export default function AddCategoryModal() {
 
     categoryMutation.mutate(data);
   };
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setValue('name', selectedCategory.name);
+      setValue('icon', selectedCategory.icon);
+    }
+  }, [selectedCategory, setValue]);
 
   return (
     <div>
@@ -98,7 +113,7 @@ export default function AddCategoryModal() {
               labelId='demo-simple-select-label'
               id='demo-simple-select'
               label='Icon'
-              defaultValue=''
+              defaultValue={selectedCategory ? selectedCategory.icon : ''}
               onChange={handleChange}
             >
               {Object.keys(categoryIcons).map((categoryKey) => {

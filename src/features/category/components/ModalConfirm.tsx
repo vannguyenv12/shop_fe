@@ -20,7 +20,7 @@ interface IModalConfirmProps {
   openConfirmModal: boolean;
   handleOpenConfirmModal: () => void;
   handleCloseConfirmModal: () => void;
-  selectedCategory: ICategory;
+  selectedCategory: ICategory | undefined;
 }
 
 export default function ModalConfirm({
@@ -33,7 +33,9 @@ export default function ModalConfirm({
 
   const handleSubmit = () => {
     console.log('delete', selectedCategory);
-    deleteMutation.mutate(selectedCategory.id);
+    if (selectedCategory) {
+      deleteMutation.mutate(selectedCategory.id);
+    }
   };
 
   return (
@@ -52,7 +54,7 @@ export default function ModalConfirm({
             component='h2'
             sx={{ marginBottom: '10px' }}
           >
-            Are you sure to delete category: {selectedCategory.name}
+            Are you sure to delete category: {selectedCategory?.name}
           </Typography>
 
           <Button variant='contained' fullWidth onClick={handleSubmit}>
