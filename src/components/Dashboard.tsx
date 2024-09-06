@@ -1,5 +1,5 @@
 function Dashboard() {
-  return <div>Dashboard</div>;
+  return <div style={{ marginLeft: '300px' }}>Dashboard</div>;
 }
 
 export default Dashboard;
