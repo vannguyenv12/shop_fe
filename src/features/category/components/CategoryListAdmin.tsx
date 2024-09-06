@@ -7,13 +7,27 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import useCategoriesQuery from '../hooks/useCategoriesQuery';
 import categoryIcons from '@/contants/category-icon';
+import { Button } from '@mui/material';
 
-export default function CategoryAdminList() {
+interface ICategoryAdminListProps {
+  handleOpenConfirmModal: () => void;
+  setSelectedCategory: (category: ICategory) => void;
+}
+
+export default function CategoryAdminList({
+  handleOpenConfirmModal,
+  setSelectedCategory,
+}: ICategoryAdminListProps) {
   const { data: category, isLoading, error } = useCategoriesQuery();
   const { data } = category;
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
+
+  const handleDelete = (category: ICategory) => {
+    handleOpenConfirmModal();
+    setSelectedCategory(category);
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -22,6 +36,7 @@ export default function CategoryAdminList() {
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell align='right'>Icon</TableCell>
+            <TableCell align='right'>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -34,6 +49,15 @@ export default function CategoryAdminList() {
                 {row.name}
               </TableCell>
               <TableCell align='right'>{categoryIcons[row.icon]}</TableCell>
+              <TableCell align='right'>
+                <Button
+                  variant='contained'
+                  color='error'
+                  onClick={() => handleDelete(row)}
+                >
+                  Delete
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
