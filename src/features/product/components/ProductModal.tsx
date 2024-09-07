@@ -14,6 +14,10 @@ import {
   TextField,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import useCategoriesQuery from '@/features/category/hooks/useCategoriesQuery';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { productCreateSchema } from '../schemas/ProductSchema';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -39,7 +43,30 @@ const style = {
   p: 4,
 };
 
+interface IInputFields {
+  name: string;
+  longDescription: string;
+  shortDescription: string;
+  main_image: string;
+  quantity: number;
+  price: number;
+  categoryId: number;
+}
+
 export default function ProductModal() {
+  const { data } = useCategoriesQuery();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IInputFields>({
+    resolver: yupResolver(productCreateSchema),
+  });
+
+  const categories = data.data;
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -48,9 +75,8 @@ export default function ProductModal() {
   const [selectedImage, setSelectedImage] = React.useState<string | null>('');
 
   //   Select
-  const [age, setAge] = React.useState('');
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+    setValue('categoryId', parseInt(event.target.value));
   };
 
   const handleImagePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +88,14 @@ export default function ProductModal() {
     const objectUrl = URL.createObjectURL(event.target.files[0]); // blob
 
     setSelectedImage(objectUrl);
+    setValue('main_image', objectUrl);
   };
+
+  const onSubmit: SubmitHandler<IInputFields> = (data) => {
+    console.log(data);
+  };
+
+  console.log('errors, ', errors);
 
   return (
     <div style={{ marginBottom: '10px' }}>
@@ -75,7 +108,7 @@ export default function ProductModal() {
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
-        <Box sx={style}>
+        <Box sx={style} component={'form'} onSubmit={handleSubmit(onSubmit)}>
           <Typography
             id='modal-modal-title'
             variant='h6'
@@ -92,6 +125,9 @@ export default function ProductModal() {
                 variant='outlined'
                 fullWidth
                 sx={{ marginBottom: 2 }}
+                error={Boolean(errors.name)}
+                helperText={errors.name?.message}
+                {...register('name')}
               />
             </Grid2>
             <Grid2 size={6}>
@@ -100,6 +136,9 @@ export default function ProductModal() {
                 variant='outlined'
                 fullWidth
                 sx={{ marginBottom: 2 }}
+                error={Boolean(errors.longDescription)}
+                helperText={errors.longDescription?.message}
+                {...register('longDescription')}
               />
             </Grid2>
           </Grid2>
@@ -111,6 +150,9 @@ export default function ProductModal() {
                 variant='outlined'
                 fullWidth
                 sx={{ marginBottom: 2 }}
+                error={Boolean(errors.shortDescription)}
+                helperText={errors.shortDescription?.message}
+                {...register('shortDescription')}
               />
             </Grid2>
             <Grid2 size={6}>
@@ -119,6 +161,9 @@ export default function ProductModal() {
                 variant='outlined'
                 fullWidth
                 sx={{ marginBottom: 2 }}
+                error={Boolean(errors.quantity)}
+                helperText={errors.quantity?.message}
+                {...register('quantity')}
               />
             </Grid2>
           </Grid2>
@@ -130,22 +175,33 @@ export default function ProductModal() {
                 variant='outlined'
                 fullWidth
                 sx={{ marginBottom: 2 }}
+                error={Boolean(errors.price)}
+                helperText={errors.price?.message}
+                {...register('price')}
               />
             </Grid2>
             <Grid2 size={6}>
               <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                <InputLabel id='demo-simple-select-label'>Age</InputLabel>
+                <InputLabel id='demo-simple-select-label'>Category</InputLabel>
                 <Select
                   labelId='demo-simple-select-label'
-                  id='demo-simple-select'
-                  value={age}
-                  label='Age'
+                  label='Category'
+                  defaultValue=''
                   onChange={handleChange}
                 >
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {categories.map((item: ICategory) => {
+                    return (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    );
+                  })}
                 </Select>
+                {errors.categoryId ? (
+                  <Typography color='error'>
+                    {errors.categoryId?.message}
+                  </Typography>
+                ) : null}
               </FormControl>
             </Grid2>
           </Grid2>
@@ -166,6 +222,9 @@ export default function ProductModal() {
               multiple
             />
           </Button>
+          {errors.main_image ? (
+            <Typography color='error'>{errors.main_image?.message}</Typography>
+          ) : null}
 
           <div>
             {' '}
