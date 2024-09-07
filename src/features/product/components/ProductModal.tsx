@@ -56,13 +56,13 @@ interface IInputFields {
 
 export default function ProductModal() {
   const { data } = useCategoriesQuery();
-  const productCreateMutation = useProductCreate();
 
   const {
     register,
     handleSubmit,
     setValue,
     setError,
+    reset,
     formState: { errors },
   } = useForm<IInputFields>({
     resolver: yupResolver(productCreateSchema),
@@ -72,7 +72,12 @@ export default function ProductModal() {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    reset();
+  };
+
+  const productCreateMutation = useProductCreate(handleClose);
 
   //   Image
   const [selectedImage, setSelectedImage] = React.useState<string | null>('');

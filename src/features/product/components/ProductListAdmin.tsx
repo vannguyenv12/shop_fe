@@ -35,6 +35,17 @@ const columns: GridColDef<IProduct>[] = [
     headerName: 'Image',
     sortable: false,
     width: 160,
+    renderCell(params) {
+      return (
+        <img
+          src={`${import.meta.env.VITE_BACKEND_URL}/images/products/${
+            params.value
+          }`}
+          width={50}
+          height={50}
+        />
+      );
+    },
   },
   {
     field: 'categoryId',
