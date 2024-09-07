@@ -46,3 +46,15 @@ interface ICategoryPayload {
   name: string;
   icon: string;
 }
+
+// Product
+interface IProduct {
+  id: number;
+  name: string;
+  shortDescription: string;
+  quantity: number;
+  price: number;
+  main_image: string;
+  categoryId: number;
+  shopId: number;
+}
