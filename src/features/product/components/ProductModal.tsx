@@ -18,6 +18,7 @@ import useCategoriesQuery from '@/features/category/hooks/useCategoriesQuery';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { productCreateSchema } from '../schemas/ProductSchema';
+import useProductCreate from '../hooks/useProductCreate';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -47,7 +48,7 @@ interface IInputFields {
   name: string;
   longDescription: string;
   shortDescription: string;
-  main_image: string;
+  main_image: File;
   quantity: number;
   price: number;
   categoryId: number;
@@ -55,11 +56,13 @@ interface IInputFields {
 
 export default function ProductModal() {
   const { data } = useCategoriesQuery();
+  const productCreateMutation = useProductCreate();
 
   const {
     register,
     handleSubmit,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<IInputFields>({
     resolver: yupResolver(productCreateSchema),
@@ -77,6 +80,9 @@ export default function ProductModal() {
   //   Select
   const handleChange = (event: SelectChangeEvent) => {
     setValue('categoryId', parseInt(event.target.value));
+    setError('categoryId', {
+      message: undefined,
+    });
   };
 
   const handleImagePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,11 +94,25 @@ export default function ProductModal() {
     const objectUrl = URL.createObjectURL(event.target.files[0]); // blob
 
     setSelectedImage(objectUrl);
-    setValue('main_image', objectUrl);
+    setValue('main_image', event.target.files[0]);
+    setError('main_image', {
+      message: undefined,
+    });
   };
 
   const onSubmit: SubmitHandler<IInputFields> = (data) => {
     console.log(data);
+    const formData = new FormData();
+
+    formData.append('name', data.name);
+    formData.append('longDescription', data.longDescription);
+    formData.append('shortDescription', data.shortDescription);
+    formData.append('quantity', data.quantity.toString());
+    formData.append('price', data.price.toString());
+    formData.append('categoryId', data.categoryId.toString());
+    formData.append('main_image', data.main_image);
+
+    productCreateMutation.mutate(formData);
   };
 
   console.log('errors, ', errors);
