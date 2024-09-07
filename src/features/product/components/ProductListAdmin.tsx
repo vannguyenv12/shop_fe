@@ -55,6 +55,9 @@ export default function ProductListAdmin() {
 
   const products = data.data;
 
+  if (isLoading) return <>Loading...</>;
+  if (error) return <>Error...</>;
+
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
