@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import AddCategoryModal from '../components/AddCategoryModal';
 import CategoryListAdmin from '../components/CategoryListAdmin';
 import ModalConfirm from '../components/ModalConfirm';
+import CategoryModal from '../components/CategoryModal';
 
 function CategoryAdminPage() {
   // Delete
@@ -17,7 +17,7 @@ function CategoryAdminPage() {
 
   return (
     <div style={{ marginLeft: '250px' }}>
-      <AddCategoryModal
+      <CategoryModal
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         open={openAddOrUpdateModal}

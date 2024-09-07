@@ -42,7 +42,7 @@ interface ICategoryModalProps {
   setOpenAddOrUpdateModal: (open: boolean) => void;
 }
 
-export default function AddCategoryModal({
+export default function CategoryModal({
   selectedCategory,
   setSelectedCategory,
   open,
