@@ -30,7 +30,6 @@ function CategoryAdminPage() {
       />
       <ModalConfirm
         openConfirmModal={openConfirmModal}
-        handleOpenConfirmModal={handleOpenConfirmModal}
         handleCloseConfirmModal={handleCloseConfirmModal}
         selectedCategory={selectedCategory}
       />

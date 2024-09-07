@@ -18,14 +18,12 @@ const style = {
 
 interface IModalConfirmProps {
   openConfirmModal: boolean;
-  handleOpenConfirmModal: () => void;
   handleCloseConfirmModal: () => void;
   selectedCategory: ICategory | undefined;
 }
 
 export default function ModalConfirm({
   openConfirmModal,
-  handleOpenConfirmModal,
   handleCloseConfirmModal,
   selectedCategory,
 }: IModalConfirmProps) {
@@ -40,7 +38,6 @@ export default function ModalConfirm({
 
   return (
     <div>
-      <Button onClick={handleOpenConfirmModal}>Open modal</Button>
       <Modal
         open={openConfirmModal}
         onClose={handleCloseConfirmModal}
