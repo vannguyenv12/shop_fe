@@ -6,10 +6,12 @@ import { Button } from '@mui/material';
 
 interface IProductListAdminProps {
   handleOpenConfirmModal: () => void;
+  setSelectedProduct: (product: IProduct) => void;
 }
 
 export default function ProductListAdmin({
   handleOpenConfirmModal,
+  setSelectedProduct,
 }: IProductListAdminProps) {
   const columns: GridColDef<IProduct>[] = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -80,8 +82,9 @@ export default function ProductListAdmin({
       sortable: false,
       width: 250,
       renderCell(params) {
+        const product = params.row;
         const handleDelete = () => {
-          console.log('Delete', params.id);
+          setSelectedProduct(product);
           handleOpenConfirmModal();
         };
 
