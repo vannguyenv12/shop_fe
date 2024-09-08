@@ -2,8 +2,15 @@ import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useProductsQuery from '../hooks/useProductsQuery';
 import useCategoriesQuery from '@/features/category/hooks/useCategoriesQuery';
+import { Button } from '@mui/material';
 
-export default function ProductListAdmin() {
+interface IProductListAdminProps {
+  handleOpenConfirmModal: () => void;
+}
+
+export default function ProductListAdmin({
+  handleOpenConfirmModal,
+}: IProductListAdminProps) {
   const columns: GridColDef<IProduct>[] = [
     { field: 'id', headerName: 'ID', width: 90 },
     {
@@ -65,7 +72,30 @@ export default function ProductListAdmin() {
       field: 'shopId',
       headerName: 'Shop ID',
       sortable: false,
-      width: 160,
+      width: 50,
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      sortable: false,
+      width: 250,
+      renderCell(params) {
+        const handleDelete = () => {
+          console.log('Delete', params.id);
+          handleOpenConfirmModal();
+        };
+
+        return (
+          <>
+            <Button variant='contained' color='warning' sx={{ marginRight: 1 }}>
+              Update
+            </Button>
+            <Button variant='contained' color='error' onClick={handleDelete}>
+              Delete
+            </Button>
+          </>
+        );
+      },
     },
   ];
 
